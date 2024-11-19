@@ -1,0 +1,33 @@
+id:  Apache RocketMQ NameServer
+info:
+  name:  Apache RocketMQ NameServer
+  author: fanc1er
+  tags: detect,tech,RocketMQ,Apache RocketMQ,service
+  severity: info
+  description: 'NameServer 是专为 RocketMQ 设计的轻量级名称服务，也是一个简单的Topic路由注册中心。具有简单、可集群横向扩展、无状态，节点之间互不通信等特点。'
+  metadata:
+    product: RocketMQ
+    vendor: Apache
+    version: $1
+    verified: true
+tcp:
+- name: Apache RocketMQ NameServer
+  inputs:
+  - data: \x00\x00\x00e\x00\x00\x00a{'code':319,'flag':0,'language':'JAVA','opaque':0,'serializeTypeCurrentRPC':'JSON','version':405}
+  read: 1024
+  host:
+  - '{{Hostname}}'
+  port: 9876,39876,29876,19876
+  matchers:
+  - type: word
+    words: 
+      - configBlackList
+      - kvConfigPath
+      - rocketmqHome
+    condition: and
+    case-insensitive: true
+  extractors:
+  - name: RocketMQ NameServer
+    type: regex
+    regex:
+      - 'rocketmq-([0-9\.]+)'
